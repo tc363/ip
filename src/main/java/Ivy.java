@@ -8,8 +8,7 @@ public class Ivy {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("    Hello! I'm Ivy.");
-        System.out.println("    What can I do for you?");
+        welcomeUser();
 
         while (true) {
             String input = scanner.nextLine();
@@ -18,56 +17,73 @@ public class Ivy {
             String arg = parts.length > 1 ? parts[1] : "";
 
             if (input.equals("bye")) {
-                System.out.println("    Bye. Hope to see you again soon!");
+                sayBye();
                 break;
             } else if (command.equals("list")) {
-                System.out.println("    Here are the tasks in your list:");
-                for (int i = 0; i < taskCount; i++) {
-                    System.out.println("    " + (i + 1) + ". " + tasks[i]);
-                }
+                printTaskList();
             } else if (command.equals("mark")) {
                 int index = Integer.parseInt(arg) - 1;
                 if (index < taskCount && index >= 0) {
-                    tasks[index].markAsDone();
-                    System.out.println("    Nice! I've marked this task as done:");
-                    System.out.println("      " + tasks[index].toString());
+                    markTask(tasks[index]);
                 }
             } else if (command.equals("unmark")) {
                 int index = Integer.parseInt(arg) - 1;
                 if (index < taskCount && index >= 0) {
-                    tasks[index].markAsNotDone();
-                    System.out.println("    OK, I've marked this task as not done yet:");
-                    System.out.println("      " + tasks[index].toString());
+                    unmarkTask(tasks[index]);
                 }
             } else if (command.equals("todo")) {
-                if (taskCount < tasks.length) {
-                    tasks[taskCount] = new Todo(arg);
-                    printAdded(tasks[taskCount]);
-                    taskCount++;
-                }
+                    addTask(new Todo(arg));
             } else if (command.equals("deadline")) {
-                if (taskCount < tasks.length) {
-                    String[] deadlineParts = input.split(" /by ", 2);
-                    tasks[taskCount] = new Deadline(deadlineParts[0], deadlineParts[1]);
-                    printAdded(tasks[taskCount]);
-                    taskCount++;
-                }
+                    String[] deadlineParts = arg.split(" /by ", 2);
+                    addTask(new Deadline(deadlineParts[0], deadlineParts[1]));
             } else if (command.equals("event")) {
-                if (taskCount < tasks.length) {
-                    String[] eventParts = input.split(" /from | /to ", 3);
-                    tasks[taskCount] = new Event(eventParts[0], eventParts[1], eventParts[2]);
-                    printAdded(tasks[taskCount]);
-                    taskCount++;
-                }
+                    String[] eventParts = arg.split(" /from | /to ", 3);
+                    addTask(new Event(eventParts[0], eventParts[1], eventParts[2]));
             }
         }
 
         scanner.close();
     }
 
-    public static void printAdded(Task task) {
+    private static void welcomeUser() {
+        System.out.println("    Hello! I'm Ivy.");
+        System.out.println("    What can I do for you?");
+    }
+
+    private static void sayBye() {
+        System.out.println("    Bye. Hope to see you again soon!");
+    }
+
+    private static void addTask(Task task) {
+        if (taskCount < tasks.length) {
+            tasks[taskCount] = task;
+            taskCount++;
+            printAdded(task);
+        }
+    }
+
+    private static void printTaskList() {
+        System.out.println("    Here are the tasks in your list:");
+        for (int i = 0; i < taskCount; i++) {
+            System.out.println("    " + (i + 1) + ". " + tasks[i]);
+        }
+    }
+
+    private static void printAdded(Task task) {
         System.out.println("    Got it. I've added this task:");
         System.out.println("      " + task);
-        System.out.println("    Now you have " + (taskCount + 1) + " tasks in the list.");
+        System.out.println("    Now you have " + taskCount + " tasks in the list.");
+    }
+
+    private static void markTask(Task task) {
+        task.markAsDone();
+        System.out.println("    Nice! I've marked this task as done:");
+        System.out.println("      " + task);
+    }
+
+    private static void unmarkTask(Task task) {
+        task.markAsNotDone();
+        System.out.println("    OK, I've marked this task as not done yet:");
+        System.out.println("      " + task);
     }
 }
