@@ -12,33 +12,14 @@ public class Ivy {
 
         while (true) {
             String input = scanner.nextLine();
-            String[] parts = input.split(" ", 2);
-            String command = parts[0];
-            String arg = parts.length > 1 ? parts[1] : "";
 
-            if (input.equals("bye")) {
-                sayBye();
-                break;
-            } else if (command.equals("list")) {
-                printTaskList();
-            } else if (command.equals("mark")) {
-                int index = Integer.parseInt(arg) - 1;
-                if (index < taskCount && index >= 0) {
-                    markTask(tasks[index]);
+            try {
+                boolean continueLoop = handleInput(input);
+                if (!continueLoop) {
+                    break;
                 }
-            } else if (command.equals("unmark")) {
-                int index = Integer.parseInt(arg) - 1;
-                if (index < taskCount && index >= 0) {
-                    unmarkTask(tasks[index]);
-                }
-            } else if (command.equals("todo")) {
-                    addTask(new Todo(arg));
-            } else if (command.equals("deadline")) {
-                    String[] deadlineParts = arg.split(" /by ", 2);
-                    addTask(new Deadline(deadlineParts[0], deadlineParts[1]));
-            } else if (command.equals("event")) {
-                    String[] eventParts = arg.split(" /from | /to ", 3);
-                    addTask(new Event(eventParts[0], eventParts[1], eventParts[2]));
+            } catch (IvyException e) {
+                System.out.println("    " + e.getMessage());
             }
         }
 
@@ -52,6 +33,71 @@ public class Ivy {
 
     private static void sayBye() {
         System.out.println("    Bye. Hope to see you again soon!");
+    }
+
+    private static boolean handleInput(String input) throws IvyException {
+        String[] parts = input.split(" ", 2);
+        String command = parts[0];
+        String arg = parts.length > 1 ? parts[1] : "";
+
+        if (command.equals("bye")) {
+            if (!arg.isEmpty()) {
+                throw new InvalidFormatException("bye");
+            }
+            sayBye();
+            return false;
+        } else if (command.equals("list")) {
+            if (!arg.isEmpty()) {
+                throw new InvalidFormatException("list");
+            }
+            printTaskList();
+        } else if (command.equals("mark")) {
+            int index = parseTaskIndex(arg, "mark");
+            markTask(tasks[index]);
+        } else if (command.equals("unmark")) {
+            int index = parseTaskIndex(arg, "unmark");
+            unmarkTask(tasks[index]);
+        } else if (command.equals("todo")) {
+            if (arg.isEmpty()) {
+                throw new InvalidFormatException("todo");
+            }
+            addTask(new Todo(arg));
+        } else if (command.equals("deadline")) {
+            String[] deadlineParts = arg.split(" /by ", 2);
+            if (deadlineParts.length < 2 || deadlineParts[0].isEmpty() || deadlineParts[1].isEmpty()) {
+                throw new InvalidFormatException("deadline");
+            }
+            addTask(new Deadline(deadlineParts[0], deadlineParts[1]));
+        } else if (command.equals("event")) {
+            String[] eventParts = arg.split(" /from | /to ", 3);
+            if (eventParts.length < 3 || eventParts[0].isEmpty() || eventParts[1].isEmpty() || eventParts[2].isEmpty()) {
+                throw new InvalidFormatException("event");
+            }
+            addTask(new Event(eventParts[0], eventParts[1], eventParts[2]));
+        } else {
+            throw new UnknownCommandException();
+        }
+
+        return true;
+    }
+
+    private static int parseTaskIndex(String arg, String command) throws IvyException {
+        if (arg.isEmpty()) {
+            throw new InvalidFormatException(command);
+        }
+
+        int index;
+        try {
+            index = Integer.parseInt(arg);
+        } catch (NumberFormatException e) {
+            throw new InvalidFormatException(command);
+        }
+
+        index--;
+        if (index < 0 || index >= taskCount) {
+            throw new InvalidIndexException();
+        }
+        return index;
     }
 
     private static void addTask(Task task) {
