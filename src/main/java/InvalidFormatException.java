@@ -11,6 +11,7 @@ public class InvalidFormatException extends IvyException {
             case "todo" -> "todo requires a description: todo <description>";
             case "deadline" -> "deadline requires a description and /by <time>: deadline <desc> /by <time>";
             case "event" -> "event requires a description, /from <start> and /to <end>: event <desc> /from <start> /to <end>";
+            case "bye" -> "bye takes no arguments: bye";
             default -> "Invalid command format!";
         };
     }
