@@ -12,6 +12,7 @@ public class InvalidFormatException extends IvyException {
             case "deadline" -> "deadline requires a description and /by <time>: deadline <desc> /by <time>";
             case "event" -> "event requires a description, /from <start> and /to <end>: event <desc> /from <start> /to <end>";
             case "bye" -> "bye takes no arguments: bye";
+            case "delete" -> "delete requires a single task number: delete <taskNumber>";
             default -> "Invalid command format!";
         };
     }

@@ -131,4 +131,12 @@ public class Ivy {
         System.out.println("    OK, I've marked this task as not done yet:");
         System.out.println("      " + task);
     }
+
+    private static void deleteTask(int index) {
+        Task removed = tasks.remove(index);
+
+        System.out.println("    Noted. I've removed this task:");
+        System.out.println("      " + removed);
+        System.out.println("    Now you have " + tasks.size() + " tasks in the list.");
+    }
 }
