@@ -1,9 +1,8 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Ivy {
-    private static final int MAX_TASKS = 100;
-    private static Task[] tasks = new Task[MAX_TASKS];
-    private static int taskCount = 0;
+    private static ArrayList<Task> tasks = new ArrayList<>();
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -53,10 +52,13 @@ public class Ivy {
             printTaskList();
         } else if (command.equals("mark")) {
             int index = parseTaskIndex(arg, "mark");
-            markTask(tasks[index]);
+            markTask(tasks.get(index));
         } else if (command.equals("unmark")) {
             int index = parseTaskIndex(arg, "unmark");
-            unmarkTask(tasks[index]);
+            unmarkTask(tasks.get(index));
+        } else if (command.equals("delete")) {
+            int index = parseTaskIndex(arg, "delete");
+            deleteTask(index);
         } else if (command.equals("todo")) {
             if (arg.isEmpty()) {
                 throw new InvalidFormatException("todo");
@@ -94,31 +96,28 @@ public class Ivy {
         }
 
         index--;
-        if (index < 0 || index >= taskCount) {
+        if (index < 0 || index >= tasks.size()) {
             throw new InvalidIndexException();
         }
         return index;
     }
 
     private static void addTask(Task task) {
-        if (taskCount < tasks.length) {
-            tasks[taskCount] = task;
-            taskCount++;
-            printAdded(task);
-        }
+        tasks.add(task);
+        printAdded(task);
     }
 
     private static void printTaskList() {
         System.out.println("    Here are the tasks in your list:");
-        for (int i = 0; i < taskCount; i++) {
-            System.out.println("    " + (i + 1) + ". " + tasks[i]);
+        for (int i = 0; i < tasks.size(); i++) {
+            System.out.println("    " + (i + 1) + ". " + tasks.get(i));
         }
     }
 
     private static void printAdded(Task task) {
         System.out.println("    Got it. I've added this task:");
         System.out.println("      " + task);
-        System.out.println("    Now you have " + taskCount + " tasks in the list.");
+        System.out.println("    Now you have " + tasks.size() + " tasks in the list.");
     }
 
     private static void markTask(Task task) {
