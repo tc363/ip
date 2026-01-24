@@ -2,6 +2,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import java.time.LocalDate;
+
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -90,14 +93,22 @@ public class Ivy {
             if (deadlineParts.length < 2 || deadlineParts[0].isEmpty() || deadlineParts[1].isEmpty()) {
                 throw new InvalidFormatException("deadline");
             }
-            addTask(new Deadline(deadlineParts[0], deadlineParts[1]));
+            try {
+                addTask(new Deadline(deadlineParts[0], deadlineParts[1]));
+            } catch (DateTimeParseException e) {
+                throw new InvalidFormatException("datetime");
+            }
             return true;
         case "event":
             String[] eventParts = arg.split(" /from | /to ", 3);
             if (eventParts.length < 3 || eventParts[0].isEmpty() || eventParts[1].isEmpty() || eventParts[2].isEmpty()) {
                 throw new InvalidFormatException("event");
             }
-            addTask(new Event(eventParts[0], eventParts[1], eventParts[2]));
+            try {
+                addTask(new Event(eventParts[0], eventParts[1], eventParts[2]));
+            } catch (DateTimeParseException e) {
+                throw new InvalidFormatException("datetime");
+            }
             return true;
         default:
             throw new UnknownCommandException();
