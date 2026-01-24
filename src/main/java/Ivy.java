@@ -1,11 +1,15 @@
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.io.File;
 
 public class Ivy {
-    private static ArrayList<Task> tasks = new ArrayList<>();
+    private static final String FILE_PATH = "./data/ivy.txt";
+    private static ArrayList<Task> tasks;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+
+        loadTasks();
 
         welcomeUser();
 
@@ -138,5 +142,24 @@ public class Ivy {
         System.out.println("    Noted. I've removed this task:");
         System.out.println("      " + removed);
         System.out.println("    Now you have " + tasks.size() + " tasks in the list.");
+    }
+
+    private static void loadTasks() {
+        File file = new File(FILE_PATH);
+
+        if (!file.exists()) {
+            tasks = new ArrayList<>();
+            return;
+        }
+
+        try (Scanner scanner = new Scanner(file)) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                Task task = Task.createTaskFromFile(line);
+                tasks.add(task);
+            }
+        } catch (Exception e) {
+            System.out.println("Error loading tasks: "  + e.getMessage());
+        }
     }
 }
