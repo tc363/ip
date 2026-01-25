@@ -1,3 +1,8 @@
+package ivy.storage;
+
+import ivy.task.Task;
+import ivy.task.TaskList;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;

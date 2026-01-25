@@ -1,5 +1,7 @@
+package ivy.exception;
+
 public class InvalidIndexException extends IvyException {
     public InvalidIndexException() {
-        super("Task number out of bounds:/");
+        super("ivy.task.Task number out of bounds:/");
     }
 }

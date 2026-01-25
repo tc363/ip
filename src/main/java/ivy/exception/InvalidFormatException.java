@@ -1,3 +1,5 @@
+package ivy.exception;
+
 public class InvalidFormatException extends IvyException {
     public InvalidFormatException(String command) {
         super(generateMessage(command));
