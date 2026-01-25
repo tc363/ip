@@ -1,19 +1,12 @@
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.Scanner;
-
 public class Ivy {
-    private ArrayList<Task> tasks;
+    private TaskList tasks;
     private Storage storage;
     private Ui ui;
 
     public Ivy(String filePath) {
         ui = new Ui();
         storage = new Storage(filePath);
-        tasks = storage.loadTasks();
+        tasks = new TaskList(storage.loadTasks());
     }
 
     public void run() {
@@ -58,17 +51,17 @@ public class Ivy {
             ui.showTaskList(tasks);
             return false;
         case "mark": {
-            int index = Parser.parseTaskIndex(arg, "mark", tasks.size());
-            markTask(tasks.get(index));
+            int index = Parser.parseTaskIndex(arg, "mark", tasks.getTaskCount());
+            markTask(tasks.getTask(index));
             return true;
         }
         case "unmark": {
-            int index = Parser.parseTaskIndex(arg, "unmark", tasks.size());
-            unmarkTask(tasks.get(index));
+            int index = Parser.parseTaskIndex(arg, "unmark", tasks.getTaskCount());
+            unmarkTask(tasks.getTask(index));
             return true;
         }
         case "delete": {
-            int index = Parser.parseTaskIndex(arg, "delete", tasks.size());
+            int index = Parser.parseTaskIndex(arg, "delete", tasks.getTaskCount());
             deleteTask(index);
             return true;
         }
@@ -87,8 +80,8 @@ public class Ivy {
     }
 
     private void addTask(Task task) {
-        tasks.add(task);
-        ui.showTaskAdded(task, tasks.size());
+        tasks.addTask(task);
+        ui.showTaskAdded(task, tasks.getTaskCount());
     }
 
     private void markTask(Task task) {
@@ -102,7 +95,7 @@ public class Ivy {
     }
 
     private void deleteTask(int index) {
-        Task removed = tasks.remove(index);
-        ui.showTaskDeleted(removed, tasks.size());
+        Task removed = tasks.deleteTask(index);
+        ui.showTaskDeleted(removed, tasks.getTaskCount());
     }
 }

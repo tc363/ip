@@ -47,9 +47,9 @@ public class Storage {
         return tasks;
     }
 
-    public void saveTasks(ArrayList<Task> tasks) {
+    public void saveTasks(TaskList tasks) {
         try (FileWriter fw = new FileWriter(filePath, false)) {
-            for (Task t : tasks) {
+            for (Task t : tasks.getTasks()) {
                 fw.write(t.toFileString() + System.lineSeparator());
             }
         } catch (IOException e) {

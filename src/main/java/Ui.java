@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Ui {
@@ -21,10 +20,10 @@ public class Ui {
         return scanner.nextLine();
     }
 
-    public void showTaskList(ArrayList<Task> tasks) {
+    public void showTaskList(TaskList tasks) {
         System.out.println("    Here are the tasks in your list:");
-        for (int i = 0; i < tasks.size(); i++) {
-            System.out.println("    " + (i + 1) + ". " + tasks.get(i));
+        for (int i = 0; i < tasks.getTaskCount(); i++) {
+            System.out.println("    " + (i + 1) + ". " + tasks.getTask(i));
         }
     }
 
