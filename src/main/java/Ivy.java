@@ -6,13 +6,14 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Ivy {
-    private static final String FILE_PATH = "./data/ivy.txt";
     private ArrayList<Task> tasks;
+    private Storage storage;
     private Ui ui;
 
     public Ivy(String filePath) {
         ui = new Ui();
-        loadTasks();
+        storage = new Storage(filePath);
+        tasks = storage.loadTasks();
     }
 
     public void run() {
@@ -25,7 +26,7 @@ public class Ivy {
                 boolean modified = handleInput(input);
 
                 if (modified) {
-                    saveTasks();
+                    storage.saveTasks(tasks);
                 }
 
                 if (input.equals("bye")) {
@@ -146,39 +147,5 @@ public class Ivy {
     private void deleteTask(int index) {
         Task removed = tasks.remove(index);
         ui.showTaskDeleted(removed, tasks.size());
-    }
-
-    private void loadTasks() {
-        tasks = new ArrayList<>();
-
-        File file = new File(FILE_PATH);
-        if (!file.exists()) {
-            return;
-        }
-
-        try (Scanner scanner = new Scanner(file)) {
-            while (scanner.hasNextLine()) {
-                String line = scanner.nextLine();
-                Task task = Task.createTaskFromFile(line);
-                tasks.add(task);
-            }
-        } catch (Exception e) {
-            System.out.println("Error loading tasks: "  + e.getMessage());
-        }
-    }
-
-    private void saveTasks() {
-        File dir = new File("./data");
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-
-        try (FileWriter fw = new FileWriter(FILE_PATH, false)) {
-            for (Task t : tasks) {
-                fw.write(t.toFileString() + System.lineSeparator());
-            }
-        } catch (IOException e) {
-            System.out.println("Error saving tasks: " + e.getMessage());
-        }
     }
 }
