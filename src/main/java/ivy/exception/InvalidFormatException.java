@@ -1,6 +1,16 @@
 package ivy.exception;
 
+/**
+ * Represents an exception thrown when a user command does not follow
+ * the expected format.
+ */
 public class InvalidFormatException extends IvyException {
+    /**
+     * Constructs an {@code InvalidFormatException} with an error message
+     * specific to the given command.
+     *
+     * @param command Command entered by user that has an invalid format.
+     */
     public InvalidFormatException(String command) {
         super(generateMessage(command));
     }
