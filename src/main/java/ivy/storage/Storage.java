@@ -9,9 +9,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Handles saving and loading tasks to and from a file.
+ * <p>
+ * Responsible for initializing the storage file and directory if they do not exist.
+ */
 public class Storage {
     private final String filePath;
 
+    /**
+     * Constructs a {@code Storage} object that manages a file at the given path.
+     *
+     * @param filePath Path of file used to store tasks.
+     */
     public Storage(String filePath) {
         this.filePath = filePath;
         initFile();
@@ -33,6 +43,11 @@ public class Storage {
         }
     }
 
+    /**
+     * Loads tasks from the storage file.
+     *
+     * @return {@code ArrayList} of {@code Task} objects read from the file.
+     */
     public ArrayList<Task> loadTasks() {
         ArrayList<Task> tasks = new ArrayList<>();
         File file = new File(filePath);
@@ -52,6 +67,11 @@ public class Storage {
         return tasks;
     }
 
+    /**
+     * Saves the given task list to the storage file.
+     *
+     * @param tasks {@code TaskList} containing tasks to save.
+     */
     public void saveTasks(TaskList tasks) {
         try (FileWriter fw = new FileWriter(filePath, false)) {
             for (Task t : tasks.getTasks()) {
