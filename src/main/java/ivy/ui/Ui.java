@@ -1,3 +1,8 @@
+package ivy.ui;
+
+import ivy.task.Task;
+import ivy.task.TaskList;
+
 import java.util.Scanner;
 
 public class Ui {
@@ -8,7 +13,7 @@ public class Ui {
     }
 
     public void showWelcome() {
-        System.out.println("    Hello! I'm Ivy.");
+        System.out.println("    Hello! I'm ivy.Ivy.");
         System.out.println("    What can I do for you?");
     }
 
