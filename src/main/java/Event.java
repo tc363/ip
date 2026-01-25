@@ -4,12 +4,18 @@ import java.time.format.DateTimeFormatter;
 public class Event extends Task {
     protected LocalDateTime from;
     protected LocalDateTime to;
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
 
     public Event(String description, String from, String to) {
         super(description);
-        DateTimeFormatter parser = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
-        this.from = LocalDateTime.parse(from, parser);
-        this.to = LocalDateTime.parse(to, parser);
+        this.from = LocalDateTime.parse(from, FORMATTER);
+        this.to = LocalDateTime.parse(to, FORMATTER);
+    }
+
+    public Event(String description, LocalDateTime from, LocalDateTime to) {
+        super(description);
+        this.from = from;
+        this.to = to;
     }
 
     @Override
