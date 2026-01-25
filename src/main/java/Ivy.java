@@ -45,88 +45,45 @@ public class Ivy {
     }
 
     private boolean handleInput(String input) throws IvyException {
-        String[] parts = input.split(" ", 2);
-        String command = parts[0];
-        String arg = parts.length > 1 ? parts[1] : "";
+        String command = Parser.getCommand(input);
+        String arg = Parser.getArgs(input);
 
         switch (command) {
         case "bye":
-            if (!arg.isEmpty()) {
-                throw new InvalidFormatException("bye");
-            }
+            Parser.validateNoArgs(arg, "bye");
             ui.showFarewell();
             return false;
         case "list":
-            if (!arg.isEmpty()) {
-                throw new InvalidFormatException("list");
-            }
+            Parser.validateNoArgs(arg, "list");
             ui.showTaskList(tasks);
             return false;
         case "mark": {
-            int index = parseTaskIndex(arg, "mark");
+            int index = Parser.parseTaskIndex(arg, "mark", tasks.size());
             markTask(tasks.get(index));
             return true;
         }
         case "unmark": {
-            int index = parseTaskIndex(arg, "unmark");
+            int index = Parser.parseTaskIndex(arg, "unmark", tasks.size());
             unmarkTask(tasks.get(index));
             return true;
         }
         case "delete": {
-            int index = parseTaskIndex(arg, "delete");
+            int index = Parser.parseTaskIndex(arg, "delete", tasks.size());
             deleteTask(index);
             return true;
         }
         case "todo":
-            if (arg.isEmpty()) {
-                throw new InvalidFormatException("todo");
-            }
-            addTask(new Todo(arg));
+            addTask(Parser.parseTodo(arg));
             return true;
         case "deadline":
-            String[] deadlineParts = arg.split(" /by ", 2);
-            if (deadlineParts.length < 2 || deadlineParts[0].isEmpty() || deadlineParts[1].isEmpty()) {
-                throw new InvalidFormatException("deadline");
-            }
-            try {
-                addTask(new Deadline(deadlineParts[0], deadlineParts[1]));
-            } catch (DateTimeParseException e) {
-                throw new InvalidFormatException("datetime");
-            }
+            addTask(Parser.parseDeadline(arg));
             return true;
         case "event":
-            String[] eventParts = arg.split(" /from | /to ", 3);
-            if (eventParts.length < 3 || eventParts[0].isEmpty() || eventParts[1].isEmpty() || eventParts[2].isEmpty()) {
-                throw new InvalidFormatException("event");
-            }
-            try {
-                addTask(new Event(eventParts[0], eventParts[1], eventParts[2]));
-            } catch (DateTimeParseException e) {
-                throw new InvalidFormatException("datetime");
-            }
+            addTask(Parser.parseEvent(arg));
             return true;
         default:
             throw new UnknownCommandException();
         }
-    }
-
-    private int parseTaskIndex(String arg, String command) throws IvyException {
-        if (arg.isEmpty()) {
-            throw new InvalidFormatException(command);
-        }
-
-        int index;
-        try {
-            index = Integer.parseInt(arg);
-        } catch (NumberFormatException e) {
-            throw new InvalidFormatException(command);
-        }
-
-        index--;
-        if (index < 0 || index >= tasks.size()) {
-            throw new InvalidIndexException();
-        }
-        return index;
     }
 
     private void addTask(Task task) {
