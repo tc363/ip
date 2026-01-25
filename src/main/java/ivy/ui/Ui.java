@@ -108,7 +108,9 @@ public class Ui {
     }
 
     /**
-     * Closes the input scanner. Should be called when program exits.
+     * Closes the input scanner.
+     * <p>
+     * This method should be called when the program exits to release resources.
      */
     public void exit() {
         scanner.close();
