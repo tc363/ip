@@ -1,26 +1,25 @@
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-
-import java.time.LocalDate;
-
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Ivy {
     private static final String FILE_PATH = "./data/ivy.txt";
-    private static ArrayList<Task> tasks;
+    private ArrayList<Task> tasks;
+    private Ui ui;
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-
+    public Ivy(String filePath) {
+        ui = new Ui();
         loadTasks();
+    }
 
-        welcomeUser();
+    public void run() {
+        ui.showWelcome();
 
         while (true) {
-            String input = scanner.nextLine();
+            String input = ui.readCommand();
 
             try {
                 boolean modified = handleInput(input);
@@ -33,23 +32,18 @@ public class Ivy {
                     break;
                 }
             } catch (IvyException e) {
-                System.out.println("    " + e.getMessage());
+                ui.showError(e.getMessage());
             }
         }
 
-        scanner.close();
+        ui.exit();
     }
 
-    private static void welcomeUser() {
-        System.out.println("    Hello! I'm Ivy.");
-        System.out.println("    What can I do for you?");
+    public static void main(String[] args) {
+        new Ivy("data/ivy.txt").run();
     }
 
-    private static void sayBye() {
-        System.out.println("    Bye. Hope to see you again soon!");
-    }
-
-    private static boolean handleInput(String input) throws IvyException {
+    private boolean handleInput(String input) throws IvyException {
         String[] parts = input.split(" ", 2);
         String command = parts[0];
         String arg = parts.length > 1 ? parts[1] : "";
@@ -59,13 +53,13 @@ public class Ivy {
             if (!arg.isEmpty()) {
                 throw new InvalidFormatException("bye");
             }
-            sayBye();
+            ui.showFarewell();
             return false;
         case "list":
             if (!arg.isEmpty()) {
                 throw new InvalidFormatException("list");
             }
-            printTaskList();
+            ui.showTaskList(tasks);
             return false;
         case "mark": {
             int index = parseTaskIndex(arg, "mark");
@@ -115,7 +109,7 @@ public class Ivy {
         }
     }
 
-    private static int parseTaskIndex(String arg, String command) throws IvyException {
+    private int parseTaskIndex(String arg, String command) throws IvyException {
         if (arg.isEmpty()) {
             throw new InvalidFormatException(command);
         }
@@ -134,45 +128,27 @@ public class Ivy {
         return index;
     }
 
-    private static void addTask(Task task) {
+    private void addTask(Task task) {
         tasks.add(task);
-        printAdded(task);
+        ui.showTaskAdded(task, tasks.size());
     }
 
-    private static void printTaskList() {
-        System.out.println("    Here are the tasks in your list:");
-        for (int i = 0; i < tasks.size(); i++) {
-            System.out.println("    " + (i + 1) + ". " + tasks.get(i));
-        }
-    }
-
-    private static void printAdded(Task task) {
-        System.out.println("    Got it. I've added this task:");
-        System.out.println("      " + task);
-        System.out.println("    Now you have " + tasks.size() + " tasks in the list.");
-    }
-
-    private static void markTask(Task task) {
+    private void markTask(Task task) {
         task.markAsDone();
-        System.out.println("    Nice! I've marked this task as done:");
-        System.out.println("      " + task);
+        ui.showTaskMarked(task);
     }
 
-    private static void unmarkTask(Task task) {
+    private void unmarkTask(Task task) {
         task.markAsNotDone();
-        System.out.println("    OK, I've marked this task as not done yet:");
-        System.out.println("      " + task);
+        ui.showTaskUnmarked(task);
     }
 
-    private static void deleteTask(int index) {
+    private void deleteTask(int index) {
         Task removed = tasks.remove(index);
-
-        System.out.println("    Noted. I've removed this task:");
-        System.out.println("      " + removed);
-        System.out.println("    Now you have " + tasks.size() + " tasks in the list.");
+        ui.showTaskDeleted(removed, tasks.size());
     }
 
-    private static void loadTasks() {
+    private void loadTasks() {
         tasks = new ArrayList<>();
 
         File file = new File(FILE_PATH);
@@ -191,7 +167,7 @@ public class Ivy {
         }
     }
 
-    private static void saveTasks() {
+    private void saveTasks() {
         File dir = new File("./data");
         if (!dir.exists()) {
             dir.mkdirs();
@@ -205,5 +181,4 @@ public class Ivy {
             System.out.println("Error saving tasks: " + e.getMessage());
         }
     }
-
 }
