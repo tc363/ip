@@ -8,17 +8,30 @@ import ivy.task.Task;
 import ivy.task.TaskList;
 import ivy.ui.Ui;
 
+/**
+ * Main class of the Ivy application.
+ * <p>
+ * Handles initialization of UI, storage, and task list, and runs the main program loop.
+ */
 public class Ivy {
     private TaskList tasks;
     private Storage storage;
     private Ui ui;
 
+    /**
+     * Constructs an {@code Ivy} object with given storage file path.
+     *
+     * @param filePath Path to file used for storing tasks.
+     */
     public Ivy(String filePath) {
         ui = new Ui();
         storage = new Storage(filePath);
         tasks = new TaskList(storage.loadTasks());
     }
 
+    /**
+     * Starts the main program loop, handling user input until the user exits.
+     */
     public void run() {
         ui.showWelcome();
 
@@ -47,6 +60,13 @@ public class Ivy {
         new Ivy("data/ivy.txt").run();
     }
 
+    /**
+     * Handles a single line of user input.
+     *
+     * @param input User input.
+     * @return {@code true} If task list modified, {@code false} otherwise.
+     * @throws IvyException If command is invalid or arguments are incorrect.
+     */
     private boolean handleInput(String input) throws IvyException {
         String command = Parser.getCommand(input);
         String arg = Parser.getArgs(input);
@@ -89,21 +109,41 @@ public class Ivy {
         }
     }
 
+    /**
+     * Adds a task to the task list and displays a message.
+     *
+     * @param task {@code Task} to add.
+     */
     private void addTask(Task task) {
         tasks.addTask(task);
         ui.showTaskAdded(task, tasks.getTaskCount());
     }
 
+    /**
+     * Marks a task as done and displays a message.
+     *
+     * @param task {@code Task} to mark as done.
+     */
     private void markTask(Task task) {
         task.markAsDone();
         ui.showTaskMarked(task);
     }
 
+    /**
+     * Marks a task as not done and displays a message.
+     *
+     * @param task {@code Task} to mark as not done.
+     */
     private void unmarkTask(Task task) {
         task.markAsNotDone();
         ui.showTaskUnmarked(task);
     }
 
+    /**
+     * Deletes a task at the specified index and displays a message.
+     *
+     * @param index Index of task to delete.
+     */
     private void deleteTask(int index) {
         Task removed = tasks.deleteTask(index);
         ui.showTaskDeleted(removed, tasks.getTaskCount());
