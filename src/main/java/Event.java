@@ -7,9 +7,8 @@ public class Event extends Task {
 
     public Event(String description, String from, String to) {
         super(description);
-        DateTimeFormatter parser = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
-        this.from = LocalDateTime.parse(from, parser);
-        this.to = LocalDateTime.parse(to, parser);
+        this.from = LocalDateTime.parse(from);
+        this.to = LocalDateTime.parse(to);
     }
 
     @Override
