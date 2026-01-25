@@ -115,4 +115,11 @@ public class Ui {
     public void exit() {
         scanner.close();
     }
+
+    public void showMatchingTasks(TaskList tasks) {
+        System.out.println("    Here are the matching tasks in your list:");
+        for (int i = 0; i < tasks.getTaskCount(); i++) {
+            System.out.println("    " + (i + 1) + ". " + tasks.getTask(i));
+        }
+    }
 }
