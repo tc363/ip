@@ -76,4 +76,11 @@ public class Parser {
             throw new InvalidFormatException("datetime");
         }
     }
+
+    public static String parseKeyword(String arg) throws IvyException {
+        if (arg.isEmpty()) {
+            throw new InvalidFormatException("find");
+        }
+        return arg.trim();
+    }
 }

@@ -84,6 +84,9 @@ public class Ivy {
         case "event":
             addTask(Parser.parseEvent(arg));
             return true;
+        case "find":
+            findTask(Parser.parseKeyword(arg));
+            return false;
         default:
             throw new UnknownCommandException();
         }
@@ -107,5 +110,10 @@ public class Ivy {
     private void deleteTask(int index) {
         Task removed = tasks.deleteTask(index);
         ui.showTaskDeleted(removed, tasks.getTaskCount());
+    }
+
+    private void findTask(String keyword) {
+        TaskList matches = tasks.findTasks(keyword);
+        ui.showMatchingTasks(matches);
     }
 }
