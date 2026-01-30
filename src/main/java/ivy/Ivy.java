@@ -17,15 +17,14 @@ public class Ivy {
     private TaskList tasks;
     private Storage storage;
     private Ui ui;
+    private String FILE_PATH = "data/ivy.txt";
 
     /**
      * Constructs an {@code Ivy} object with given storage file path.
-     *
-     * @param filePath Path to file used for storing tasks.
      */
-    public Ivy(String filePath) {
+    public Ivy() {
         ui = new Ui();
-        storage = new Storage(filePath);
+        storage = new Storage(FILE_PATH);
         tasks = new TaskList(storage.loadTasks());
     }
 
@@ -57,7 +56,7 @@ public class Ivy {
     }
 
     public static void main(String[] args) {
-        new Ivy("data/ivy.txt").run();
+        new Ivy().run();
     }
 
     /**
@@ -155,5 +154,12 @@ public class Ivy {
     private void findTask(String keyword) {
         TaskList matches = tasks.findTasks(keyword);
         ui.showMatchingTasks(matches);
+    }
+
+    /**
+     * Generates a response for the user's chat message.
+     */
+    public String getResponse(String input) {
+        return "Duke heard: " + input;
     }
 }
