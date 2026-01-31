@@ -43,7 +43,7 @@ test {
 }
 
 application {
-    mainClass.set("ivy.Ivy")
+    mainClass.set("ivy.Launcher")
 }
 
 shadowJar {
