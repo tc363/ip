@@ -34,6 +34,7 @@ public class MainWindow extends AnchorPane {
     /** Injects the Ivy instance */
     public void setIvy(Ivy i) {
         ivy = i;
+        dialogContainer.getChildren().add(DialogBox.getIvyDialog(ivy.getWelcomeMessage(), ivyImage));
     }
 
     /**

@@ -156,10 +156,26 @@ public class Ivy {
         ui.showMatchingTasks(matches);
     }
 
-    /**
-     * Generates a response for the user's chat message.
-     */
     public String getResponse(String input) {
-        return "Duke heard: " + input;
+        try {
+            boolean modified = handleInput(input);
+
+            if (modified) {
+                storage.saveTasks(tasks);
+            }
+
+            if (input.equals("bye")) {
+                return "Bye! Hope to see you again soon!";
+            }
+
+            return ui.getLastMessage();
+        } catch (IvyException e) {
+            return e.getMessage();
+        }
+    }
+
+    public String getWelcomeMessage() {
+        ui.showWelcome();
+        return ui.getLastMessage();
     }
 }

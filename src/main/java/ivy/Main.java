@@ -3,19 +3,13 @@ package ivy;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
 /**
- * A GUI for Duke using FXML.
+ * A GUI for Ivy using FXML.
  */
 public class Main extends Application {
 
@@ -30,7 +24,7 @@ public class Main extends Application {
             stage.setScene(scene);
             stage.setMinHeight(220);
             stage.setMinWidth(417);
-            fxmlLoader.<MainWindow>getController().setIvy(ivy);  // inject the Duke instance
+            fxmlLoader.<MainWindow>getController().setIvy(ivy);  // inject the Ivy instance
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
