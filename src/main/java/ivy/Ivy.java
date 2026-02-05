@@ -165,7 +165,7 @@ public class Ivy {
             }
 
             if (input.equals("bye")) {
-                return "Bye! Hope to see you again soon!";
+                ui.showFarewell();
             }
 
             return ui.getLastMessage();
