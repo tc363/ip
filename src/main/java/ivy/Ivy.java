@@ -2,6 +2,7 @@ package ivy;
 
 import ivy.exception.IvyException;
 import ivy.exception.UnknownCommandException;
+import ivy.parser.CommandType;
 import ivy.parser.Parser;
 import ivy.storage.Storage;
 import ivy.task.Task;
@@ -71,43 +72,43 @@ public class Ivy {
      * @throws IvyException If command is invalid or arguments are incorrect.
      */
     private boolean handleInput(String input) throws IvyException {
-        String command = Parser.getCommand(input);
+        CommandType command = Parser.getCommand(input);
         String arg = Parser.getArgs(input);
 
         switch (command) {
-        case "bye":
-            Parser.validateNoArgs(arg, "bye");
+        case BYE:
+            Parser.validateNoArgs(arg, command);
             ui.showFarewell();
             return false;
-        case "list":
-            Parser.validateNoArgs(arg, "list");
+        case LIST:
+            Parser.validateNoArgs(arg, command);
             ui.showTaskList(tasks);
             return false;
-        case "mark": {
-            int index = Parser.parseTaskIndex(arg, "mark", tasks.getTaskCount());
+        case MARK: {
+            int index = Parser.parseTaskIndex(arg, command, tasks.getTaskCount());
             markTask(tasks.getTask(index));
             return true;
         }
-        case "unmark": {
-            int index = Parser.parseTaskIndex(arg, "unmark", tasks.getTaskCount());
+        case UNMARK: {
+            int index = Parser.parseTaskIndex(arg, command, tasks.getTaskCount());
             unmarkTask(tasks.getTask(index));
             return true;
         }
-        case "delete": {
-            int index = Parser.parseTaskIndex(arg, "delete", tasks.getTaskCount());
+        case DELETE: {
+            int index = Parser.parseTaskIndex(arg, command, tasks.getTaskCount());
             deleteTask(index);
             return true;
         }
-        case "todo":
+        case TODO:
             addTask(Parser.parseTodo(arg));
             return true;
-        case "deadline":
+        case DEADLINE:
             addTask(Parser.parseDeadline(arg));
             return true;
-        case "event":
+        case EVENT:
             addTask(Parser.parseEvent(arg));
             return true;
-        case "find":
+        case FIND:
             findTask(Parser.parseKeyword(arg));
             return false;
         default:

@@ -1,5 +1,6 @@
 package ivy.parser;
 
+import ivy.exception.UnknownCommandException;
 import ivy.task.Deadline;
 import ivy.task.Event;
 import ivy.task.Todo;
@@ -20,9 +21,13 @@ public class Parser {
      * @param input Full user input.
      * @return Command word.
      */
-    public static String getCommand(String input) {
+    public static CommandType getCommand(String input) throws IvyException {
         String[] parts = input.split(" ", 2);
-        return parts[0];
+        try {
+            return CommandType.valueOf(parts[0].toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new UnknownCommandException();
+        }
     }
 
     /**
@@ -43,9 +48,9 @@ public class Parser {
      * @param command Command being validated.
      * @throws IvyException If arguments are present.
      */
-    public static void validateNoArgs(String arg, String command) throws IvyException {
+    public static void validateNoArgs(String arg, CommandType command) throws IvyException {
         if (!arg.isEmpty()) {
-            throw new InvalidFormatException(command);
+            throw new InvalidFormatException(command.name().toLowerCase());
         }
     }
 
@@ -58,18 +63,18 @@ public class Parser {
      * @return Parsed zero-based task index.
      * @throws IvyException If the index is invalid.
      */
-    public static int parseTaskIndex(String arg, String command, int max) throws IvyException {
+    public static int parseTaskIndex(String arg, CommandType command, int max) throws IvyException {
         assert max >= 0 : "Max task count should never be negative";
 
         if (arg.isEmpty()) {
-            throw new InvalidFormatException(command);
+            throw new InvalidFormatException(command.name().toLowerCase());
         }
 
         int index;
         try {
             index = Integer.parseInt(arg);
         } catch (NumberFormatException e) {
-            throw new InvalidFormatException(command);
+            throw new InvalidFormatException(command.name().toLowerCase());
         }
 
         index--;
@@ -88,7 +93,7 @@ public class Parser {
      */
     public static Todo parseTodo(String arg) throws IvyException {
         if (arg.isEmpty()) {
-            throw new InvalidFormatException("todo");
+            throw new InvalidFormatException(CommandType.TODO.name().toLowerCase());
         }
         return new Todo(arg);
     }
@@ -103,7 +108,7 @@ public class Parser {
     public static Deadline parseDeadline(String arg) throws IvyException {
         String[] parts = arg.split(" /by ", 2);
         if (parts.length < 2 || parts[0].isEmpty() || parts[1].isEmpty()) {
-            throw new InvalidFormatException("deadline");
+            throw new InvalidFormatException(CommandType.DEADLINE.name().toLowerCase());
         }
         try {
             return new Deadline(parts[0], parts[1]);
@@ -122,7 +127,7 @@ public class Parser {
     public static Event parseEvent(String arg) throws IvyException {
         String[] parts = arg.split(" /from | /to ", 3);
         if (parts.length < 3 || parts[0].isEmpty() || parts[1].isEmpty() || parts[2].isEmpty()) {
-            throw new InvalidFormatException("event");
+            throw new InvalidFormatException(CommandType.EVENT.name().toLowerCase());
         }
         try {
             return new Event(parts[0], parts[1], parts[2]);
@@ -133,7 +138,7 @@ public class Parser {
 
     public static String parseKeyword(String arg) throws IvyException {
         if (arg.isEmpty()) {
-            throw new InvalidFormatException("find");
+            throw new InvalidFormatException(CommandType.FIND.name().toLowerCase());
         }
         return arg.trim();
     }
