@@ -27,6 +27,10 @@ public class Ivy {
         ui = new Ui();
         storage = new Storage(FILE_PATH);
         tasks = new TaskList(storage.loadTasks());
+
+        assert ui != null : "UI should be initialized";
+        assert storage != null : "Storage should be initialized";
+        assert tasks != null : "TaskList should not be null after loading tasks";
     }
 
     /**
