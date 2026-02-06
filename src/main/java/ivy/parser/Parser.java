@@ -59,6 +59,8 @@ public class Parser {
      * @throws IvyException If the index is invalid.
      */
     public static int parseTaskIndex(String arg, String command, int max) throws IvyException {
+        assert max >= 0 : "Max task count should never be negative";
+
         if (arg.isEmpty()) {
             throw new InvalidFormatException(command);
         }
