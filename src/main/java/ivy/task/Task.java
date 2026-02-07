@@ -19,6 +19,10 @@ public abstract class Task {
         return isDone;
     }
 
+    public boolean isUpcoming() {
+        return false;
+    }
+
     public String getStatusIcon() {
         return (isDone ? "X" : " ");
     }
