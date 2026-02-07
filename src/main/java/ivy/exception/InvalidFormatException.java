@@ -27,6 +27,7 @@ public class InvalidFormatException extends IvyException {
             case "delete" -> "delete requires a single task number: delete <taskNumber>";
             case "datetime" -> "Date must be d/M/yyyy and time must be HHmm";
             case "find" -> "find requires keyword: find <keyword>";
+            case "remind" -> "remind takes no arguments: remind";
             default -> "Invalid command format!";
         };
     }

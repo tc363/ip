@@ -12,6 +12,7 @@ public class Event extends Task {
     protected LocalDateTime from;
     protected LocalDateTime to;
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
+    private static final int UPCOMING_DAYS = 7;
 
     /**
      * Constructs an {@code Event} task from a description and date-time strings.
@@ -37,6 +38,12 @@ public class Event extends Task {
         super(description);
         this.from = from;
         this.to = to;
+    }
+
+    @Override
+    public boolean isUpcoming() {
+        LocalDateTime now = LocalDateTime.now();
+        return !isDone() && from.isAfter(now) && from.isBefore(now.plusDays(UPCOMING_DAYS));
     }
 
     /**

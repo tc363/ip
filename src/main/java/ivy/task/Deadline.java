@@ -11,6 +11,7 @@ import java.time.format.DateTimeFormatter;
 public class Deadline extends Task {
     protected LocalDateTime by;
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
+    private static final int UPCOMING_DAYS = 7;
 
     /**
      * Constructs a {@code Deadline} task from a description and a date-time string.
@@ -32,6 +33,12 @@ public class Deadline extends Task {
     public Deadline(String description, LocalDateTime by) {
         super(description);
         this.by = by;
+    }
+
+    @Override
+    public boolean isUpcoming() {
+        LocalDateTime now = LocalDateTime.now();
+        return !isDone() && by.isAfter(now) && by.isBefore(now.plusDays(UPCOMING_DAYS));
     }
 
     /**

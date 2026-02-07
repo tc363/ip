@@ -78,4 +78,17 @@ public class TaskList {
         }
         return matches;
     }
+
+    public TaskList remindTasks() {
+        TaskList upcomingTasks = new TaskList(new ArrayList<>());
+
+        for (int i = 0; i < getTaskCount(); i++) {
+            Task task = getTask(i);
+            if (task.isUpcoming()) {
+                upcomingTasks.addTask(task);
+            }
+        }
+
+        return upcomingTasks;
+    }
 }

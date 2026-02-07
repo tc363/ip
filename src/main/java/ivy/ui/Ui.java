@@ -139,6 +139,17 @@ public class Ui {
         System.out.println("    " + lastMessage.replace("\n", "\n    "));
     }
 
+    public void showUpcomingTasks(TaskList tasks) {
+        StringBuilder sb = new StringBuilder("Here are the upcoming tasks in your list:\n");
+        for (int i = 0; i < tasks.getTaskCount(); i++) {
+            sb.append(i + 1).append(". ").append(tasks.getTask(i)).append("\n");
+        }
+
+        lastMessage = sb.toString().trim();
+
+        System.out.println("    " + lastMessage.replace("\n", "\n    "));
+    }
+
     public String getLastMessage() {
         return lastMessage;
     }

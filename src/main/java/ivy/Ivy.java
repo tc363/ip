@@ -111,6 +111,10 @@ public class Ivy {
         case FIND:
             findTask(Parser.parseKeyword(arg));
             return false;
+        case REMIND:
+            Parser.validateNoArgs(arg, command);
+            remindTasks();
+            return false;
         default:
             throw new UnknownCommandException();
         }
@@ -159,6 +163,11 @@ public class Ivy {
     private void findTask(String keyword) {
         TaskList matches = tasks.findTasks(keyword);
         ui.showMatchingTasks(matches);
+    }
+
+    private void remindTasks() {
+        TaskList upcomingTasks = tasks.remindTasks();
+        ui.showUpcomingTasks(upcomingTasks);
     }
 
     public String getResponse(String input) {
