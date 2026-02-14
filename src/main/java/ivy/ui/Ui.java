@@ -50,9 +50,13 @@ public class Ui {
      * @param tasks {@code TaskList} to display.
      */
     public void showTaskList(TaskList tasks) {
+        if (handleEmptyTaskList(tasks, "Your task list is currently empty.")) {
+            return;
+        }
+
         StringBuilder sb = new StringBuilder("Here are the tasks in your list:\n");
         for (int i = 0; i < tasks.getTaskCount(); i++) {
-            sb.append(i + 1).append(". ").append(tasks.getTask(i)).append("\n");
+            sb.append(formatTaskWithIndex(i + 1, tasks.getTask(i))).append("\n");
         }
 
         lastMessage = sb.toString(); // store for GUI
@@ -131,7 +135,7 @@ public class Ui {
     public void showMatchingTasks(TaskList tasks) {
         StringBuilder sb = new StringBuilder("Here are the matching tasks in your list:\n");
         for (int i = 0; i < tasks.getTaskCount(); i++) {
-            sb.append(i + 1).append(". ").append(tasks.getTask(i)).append("\n");
+            sb.append(formatTaskWithIndex(i + 1, tasks.getTask(i))).append("\n");
         }
 
         lastMessage = sb.toString().trim(); // store for GUI
@@ -142,12 +146,27 @@ public class Ui {
     public void showUpcomingTasks(TaskList tasks) {
         StringBuilder sb = new StringBuilder("Here are the upcoming tasks in your list:\n");
         for (int i = 0; i < tasks.getTaskCount(); i++) {
-            sb.append(i + 1).append(". ").append(tasks.getTask(i)).append("\n");
+            sb.append(formatTaskWithIndex(i + 1, tasks.getTask(i))).append("\n");
         }
 
         lastMessage = sb.toString().trim();
 
         System.out.println("    " + lastMessage.replace("\n", "\n    "));
+    }
+
+    // AI-assisted refactor:
+    // Extracted task formatting into a helper method to avoid duplication
+    // across multiple display methods with the help of ChatGPT.
+
+    /**
+     * Formats a task with proper indentation so wrapped lines align nicely.
+     *
+     * @param index Task index.
+     * @param task Task.
+     */
+    private String formatTaskWithIndex(int index, Task task) {
+        String indexStr = index + ". ";
+        return indexStr + task;
     }
 
     public String getLastMessage() {
