@@ -8,12 +8,12 @@ things.
 
 **Features**
 
-1. [x] Add tasks: ToDo, Deadline, Event
-2. [x] Mark tasks as done / not done
-3. [x] Delete tasks
-4. [x] List all tasks
-5. [x] Find tasks by keyword
-6. [x] Reminders
+- [x] Add tasks: ToDo, Deadline, Event
+- [x] Mark tasks as done / not done
+- [x] Delete tasks
+- [x] List all tasks
+- [x] Find tasks by keyword
+- [x] Reminders
 
 ---
 
