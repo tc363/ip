@@ -133,6 +133,10 @@ public class Ui {
     }
 
     public void showMatchingTasks(TaskList tasks) {
+        if (handleEmptyTaskList(tasks, "No matching tasks found.")) {
+            return;
+        }
+
         StringBuilder sb = new StringBuilder("Here are the matching tasks in your list:\n");
         for (int i = 0; i < tasks.getTaskCount(); i++) {
             sb.append(formatTaskWithIndex(i + 1, tasks.getTask(i))).append("\n");
@@ -144,6 +148,10 @@ public class Ui {
     }
 
     public void showUpcomingTasks(TaskList tasks) {
+        if (handleEmptyTaskList(tasks, "No upcoming tasks in the next 7 days.")) {
+            return;
+        }
+
         StringBuilder sb = new StringBuilder("Here are the upcoming tasks in your list:\n");
         for (int i = 0; i < tasks.getTaskCount(); i++) {
             sb.append(formatTaskWithIndex(i + 1, tasks.getTask(i))).append("\n");
@@ -167,6 +175,26 @@ public class Ui {
     private String formatTaskWithIndex(int index, Task task) {
         String indexStr = index + ". ";
         return indexStr + task;
+    }
+
+    // AI-assisted enhancement:
+    // Added a reusable helper method to check for empty task lists and display
+    // a custom message. This improves user experience by preventing display
+    // of empty task lists in showTaskList, showUpcomingTasks, and showMatchingTasks.
+
+    /**
+     * Checks if a TaskList is empty and displays a custom message.
+     *
+     * @param tasks TaskList to check.
+     * @param emptyMessage Message to display if the list is empty/
+     * @return true if the task list was empty, false otherwise.
+     */
+    private boolean handleEmptyTaskList(TaskList tasks, String emptyMessage) {
+        if (tasks.getTaskCount() == 0) {
+            lastMessage = emptyMessage;
+            return true;
+        }
+        return false;
     }
 
     public String getLastMessage() {
