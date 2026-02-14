@@ -1,6 +1,6 @@
 # Ivy User Guide
 
-![Screenshot of Ivy GUI](docs/Ui.png)
+![Screenshot of Ivy GUI](Ui.png)
 
 Welcome to Ivy! Ivy helps you add, track, and manage tasks 
 like ToDos, Deadlines, and Events, freeing your mind of remembering 
